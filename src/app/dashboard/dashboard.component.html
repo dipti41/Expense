@@ -1,0 +1,167 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Expense      
+    </h1>
+    
+  </section>
+
+  <!-- Main content -->
+
+  <section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+
+      <div class="col-md-5 col-sm-6 col-xs-12">
+        <div class="info-box bg-aqua">
+          <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+          <div class="info-box-content">
+            <div class="col-md-6">
+              <span class="info-box-text">Total Budget</span>
+              <span class="info-box-number">Rs.{{totalbudget}}</span>
+            </div>
+            <div>
+              <span class="info-box-text">Total Expense</span>
+              <span class="info-box-number">Rs.{{totalexpense}}</span>
+            </div>
+            
+            <div class="progress">
+              <div class="progress-bar" [style.width]="percentage"></div>
+            </div>
+            <span class="progress-description">
+              {{percentage}} Spent
+            </span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- ./col -->
+
+
+    </div>
+    <!-- /.row -->
+    <!-- Main row -->
+    <div class="row">
+      <!-- Left col -->
+      <section class="content" *ngIf="show_form">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+              <div class="box-header with-border">
+                <h3 class="box-title">Entry Form</h3>
+              </div>
+              <!-- /.box-header -->
+              <!-- form start -->
+              <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+                <div class="box-body">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Category Name</label>
+                    <!-- <input type="text" formControlName="category" #category class="form-control" id="exampleInputEmail1"
+                      placeholder="Category"> -->
+                      <select formControlName="category" #category  class="form-control" id="exampleInputEmail1">
+                        <option *ngFor="let catname of category_list" [value]="catname.categories">{{catname.categories}}</option>
+                      </select>
+                    <input type="hidden" formControlName="record_id" #record_id>
+                    <span [style.color]="'red'" *ngIf="!expenseForm.controls['category'].valid && expenseForm.controls['category'].touched">
+                      Category name should <strong>required</strong>
+                    </span>
+                    <input type="hidden">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Item Name</label>
+                    <input type="text" formControlName="item" #item class="form-control" id="exampleInputPassword1"
+                      placeholder="Item">
+                    <span [style.color]="'red'" *ngIf="!expenseForm.controls['item'].valid && expenseForm.controls['item'].touched">
+                      Item name should <strong>required</strong>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Amount</label>
+                    <input type="text" formControlName="amount" #amount class="form-control" id="exampleInputPassword1"
+                      placeholder="Amount">
+                    <span [style.color]="'red'" *ngIf="!expenseForm.controls['amount'].valid && expenseForm.controls['amount'].touched">
+                      Amount should <strong>required</strong>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Expense Date</label>
+                    <input type="date" formControlName="expense_date" #expense_date class="form-control" id="datepicker"
+                      placeholder="Date">
+                  </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                  <button type="button" class="btn btn-primary" [disabled]="!expenseForm.valid" (click)="onSubmit(category.value,item.value,amount.value,expense_date.value,record_id.value)">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="col-md-2">
+      <button type="button" class="btn btn-info" (click)="showform(index=null)">Add Expense</button>
+      </div>
+      <div class="col-md-8">
+          <button type="button" class="btn btn-success pull-right" *ngIf="disabledbutton" (click)="undoexpense()">Undo Expense</button>
+          </div>
+      <section class="content">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <!-- /.box-header -->
+              <div class="box-body">
+                <table id="example" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Item Name</th>
+                      <th>Amount</th>
+                      <th>Expense Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let exp of exps;let i=index">
+                      <td>{{exp.category}}</td>
+                      <td>{{exp.item}}
+                      </td>
+                      <td>{{exp.amount}}</td>
+                      <td>{{exp.datee|date: 'dd/MM/yyyy'}}</td>
+                      <td><i class="fa fa-pencil" (click)="showform(i)"></i> &nbsp;&nbsp;&nbsp;<i class="fa fa-trash"
+                          (click)="deletedata(i)"></i></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+          <!-- /.col -->
+        </div>
+
+
+      </section>
+
+      <!-- /.Left col -->
+      <!-- right col (We are only adding the ID to make the widgets sortable)-->
+      <section class="col-lg-5 connectedSortable">
+
+
+      </section>
+      <!-- right col -->
+    </div>
+    <!-- /.row (main row) -->
+
+  </section>
+  <!-- /.content -->
+</div>
